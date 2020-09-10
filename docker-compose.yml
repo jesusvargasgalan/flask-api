@@ -1,0 +1,20 @@
+version: '2'
+
+services:
+  redis:
+    image: redis
+
+  backend:
+    build: .
+    image: eoi/api-flask
+    environment:
+      - FLASK_APP=main.py
+      - FLASK_ENV=development
+      - REDIS_URL=redis://redis:6379/0
+    command: poetry run flask run --host=0.0.0.0
+    volumes:
+      - .:/code
+    ports:
+      - 5000:5000
+    depends_on:
+      - redis
